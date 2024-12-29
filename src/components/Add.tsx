@@ -1,4 +1,5 @@
 "use client";
+import { useWixClient } from "@/hooks/useWixClient";
 import { useState } from "react";
 
 const Add = ({
@@ -10,6 +11,23 @@ const Add = ({
   variantId: string;
   stockNumber: number;
 }) => {
+
+  const wixClient = useWixClient();
+  const addItem = async () => {
+    const response = await wixClient.currentCart.addToCurrentCart({
+      lineItems: [
+        {
+          catalogReference: {
+            appId: process.env.NEXT_PUBLIC_WIX_APP_ID!,
+            catalogItemId: productId,
+            ...(variantId && {optionId : {variantId}})
+          },
+          quantity: stockNumber
+        },
+      ],
+    });
+  }
+
   const [quantity, seQuantity] = useState(0);
   return (
     <div className="flex flex-col gap-4">
@@ -31,7 +49,7 @@ const Add = ({
             {"Don't"} miss it
           </div>
         </div>
-        <div className="flex justify-evenly cursor-pointer gap-4 rounded-3xl w-36 py-2 px-6 ring-1 text-lama text-sm ring-lama bg-white hover:bg-lama hover:text-white">
+        <div onClick={addItem} className="flex justify-evenly cursor-pointer gap-4 rounded-3xl w-36 py-2 px-6 ring-1 text-lama text-sm ring-lama bg-white hover:bg-lama hover:text-white">
           <button>Add to Cart</button>
         </div>
       </div>

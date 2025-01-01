@@ -3,10 +3,11 @@
 import Image from "next/image"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Cart from "./CartModel";
 import { useWixClient } from "@/hooks/useWixClient";
 import Cookies from "js-cookie";
+import { useCartStore } from "@/hooks/useCartStore";
 
 const NavIcons = () => {
 
@@ -25,6 +26,14 @@ const NavIcons = () => {
       setIsProfileOpen(prev => !prev);
     }
   }
+
+  const {cart, counter, getCart} = useCartStore();
+
+  useEffect(()=> {
+      
+      getCart(myWixClient);
+
+  }, [myWixClient,getCart]);
 
   //AUTH with WIX managed login
 
@@ -84,7 +93,7 @@ const NavIcons = () => {
           className="cursor-pointer"
         />
         <div className="absolute -top-4 -right-4 w-6 h-6 bg-lama flex items-center text-sm text-white justify-center rounded-full">
-          2
+          {counter}
         </div>
       </div>
       {isCartOpen && <Cart></Cart>}

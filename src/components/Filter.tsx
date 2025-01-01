@@ -10,7 +10,6 @@ const Filter = () => {
 
     const handleChange=(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>{
         const {name, value} = e.target;
-        console.log(name, value);
         const params = new URLSearchParams(searchParams);
         params.set(name, value);
         replace(`${pathname}?${params.toString()}`)

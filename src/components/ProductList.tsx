@@ -43,7 +43,6 @@ const ProductList = async ({
     }
     const res = await productQuery.find();
 
-    console.log(res);
 
 
   return (

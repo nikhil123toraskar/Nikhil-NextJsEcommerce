@@ -13,23 +13,23 @@ const slides = [
     //img: "https://www.berrylush.com/cdn/shop/files/1_ec81a72a-19c5-46e3-8cb6-6fb15c32a0ad.jpg?v=1708597063&width=700",
     img:"/55.jpg",
     url: "/",
-    bg: "bg-gradient-to-r from-gray-100 to-gray-300"
+    bg: "bg-gradient-to-r from-green-100 to-white-50"
   },
   {
     id: 2,
     title: "Winter Sale Collections",
     description: "Sale! Up to 50% off!",
     //img: "https://www.berrylush.com/cdn/shop/products/6_6d691086-9e93-4f2e-ab3b-49f31777ec42.jpg?v=1696351500&width=700",
-    img: "/99.jpg",
+    img: "/88888.jpg",
     url: "/",
-    bg: "bg-gradient-to-r from-yellow-50 to-purple-50"
+    bg: "bg-gradient-to-r from-pink-50 to-blue-300"
   },
   {
     id: 3,
     title: "Spring Sale Collections",
     description: "Sale! Up to 50% off!",
     //img: "https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=600",
-    img:"/66.png",
+    img:"/99.jpg",
     url: "/",
     bg: "bg-gradient-to-r from-green-50 to-purple-50"
   }

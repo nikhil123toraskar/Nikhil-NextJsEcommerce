@@ -13,10 +13,12 @@ const ProductList = async ({
   categoryId,
   limit,
   searchParams,
+  showPagination = true,
 }: {
   categoryId?: string;
   limit?: number;
   searchParams?: any;
+  showPagination?: boolean;
 }) => {
 
   const wixClient = await wixClientServer();
@@ -95,7 +97,9 @@ const ProductList = async ({
         </Link>
         
       ))}
+      {showPagination &&
         <Pagination currentPage={res.currentPage || 0} hasPrev={res.hasPrev()} hasNext={res.hasNext()}/>
+      }
     </div>
   );
 };

@@ -3,13 +3,13 @@
 import { useCartStore } from "@/hooks/useCartStore";
 import { useWixClient } from "@/hooks/useWixClient";
 import Image from "next/image";
-import { useEffect } from "react";
 import { media as wixMedia } from "@wix/sdk";
 
 const Cart = () => {
 
     const wixClient = useWixClient();
     const {cart, isLoading, removeItem} = useCartStore();
+    console.log(cart,'cart');
 
 
 
@@ -58,7 +58,7 @@ const Cart = () => {
             <div className=''>
                 <div className='flex justify-between items-center font-semibold'>
                     <span className=''>Subtotal</span>
-                    <span className=''>₹ {cart.subtotal.amount}</span>
+                    <span className=""></span>
                 </div>
                 
                     <p className='text-gray-500 text-sm mt-2 mb-4'>

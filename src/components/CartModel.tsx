@@ -9,7 +9,7 @@ const Cart = () => {
 
     const wixClient = useWixClient();
     const {cart, isLoading, removeItem} = useCartStore();
-    console.log(cart,'cart');
+    console.log((cart as any).subtotal,'cart');
 
 
 
@@ -58,7 +58,7 @@ const Cart = () => {
             <div className=''>
                 <div className='flex justify-between items-center font-semibold'>
                     <span className=''>Subtotal</span>
-                    <span className=""></span>
+                    <span className="">₹ {(cart as any).subtotal.amount}</span>
                 </div>
                 
                     <p className='text-gray-500 text-sm mt-2 mb-4'>

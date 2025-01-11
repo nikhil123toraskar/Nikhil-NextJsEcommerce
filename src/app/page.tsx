@@ -14,7 +14,7 @@ const HomePage = async () => {
   useEffect(() => {
     const getProducts = async () => {
       const res = await wixClient.products.queryProducts().find();
-      console.log(res);
+ 
     };
 
     getProducts();
@@ -25,7 +25,7 @@ const HomePage = async () => {
 
   const res = await wixClient.products.queryProducts().find();
 
-  console.log(res);
+
  */
   return (
     <div className=''>

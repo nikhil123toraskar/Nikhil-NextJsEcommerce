@@ -23,7 +23,6 @@ const LoginPage = () => {
     router.push("/");
   }
 
-  console.log(isLoggedIn);
 
   const [mode, setMode] = useState(MODE.LOGIN);
   const [username, setUsername] = useState("");
@@ -93,13 +92,11 @@ const LoginPage = () => {
           break;
       
       }
-      console.log(response);
 
       switch (response?.loginState) {
         case LoginState.SUCCESS:
           seteMessage("Successfull! Redirecting to main page");
           const tokens = await myWixClient.auth.getMemberTokensForDirectLogin(response.data.sessionToken!);
-          console.log(tokens);
           Cookies.set("refreshToken", JSON.stringify(tokens.refreshToken), {expires:2});
           myWixClient.auth.setTokens(tokens);
           router.push("/");

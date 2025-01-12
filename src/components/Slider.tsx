@@ -8,7 +8,7 @@ import { useEffect, useState } from "react"
 const slides = [
   {
     id: 1,
-    title: "Summer Sale Collections",
+    title: "Affordable Luxury At Your Fingertips",
     description: "Sale! Up to 50% off!",
     //img: "https://www.berrylush.com/cdn/shop/files/1_ec81a72a-19c5-46e3-8cb6-6fb15c32a0ad.jpg?v=1708597063&width=700",
     img:"/55.jpg",
@@ -17,8 +17,8 @@ const slides = [
   },
   {
     id: 2,
-    title: "Winter Sale Collections",
-    description: "Sale! Up to 50% off!",
+    title: "New Arrivals dropping every week!",
+    description: "Curated Collections for every mood",
     //img: "https://www.berrylush.com/cdn/shop/products/6_6d691086-9e93-4f2e-ab3b-49f31777ec42.jpg?v=1696351500&width=700",
     img: "/88888.jpg",
     url: "/",
@@ -26,10 +26,10 @@ const slides = [
   },
   {
     id: 3,
-    title: "Spring Sale Collections",
-    description: "Sale! Up to 50% off!",
+    title: "Bold Looks for the Bright Days",
+    description: "Shop the Street Style Edit!",
     //img: "https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=600",
-    img:"/99.jpg",
+    img:"/slider3.jpg",
     url: "/",
     bg: "bg-gradient-to-r from-green-50 to-purple-50"
   }
@@ -55,15 +55,15 @@ const Slider = () => {
           <div className={`${slide.bg} w-screen flex flex-col gap-16 xl:flex-row`} key={slide.id}>
             {/*TEXT CONTAINER*/}
             <div className='h-1/2 xl:w-1/2 xl:h-full flex flex-col items-center justify-center gap-8 2xl:gap-12 text-center'>
-              <h2 className='text-xl lg:text-3xl 3xl:text-5xl'>{slide.description}</h2>
+              <h2 className='font-serif text-xl lg:text-3xl 3xl:text-5xl'>{slide.description}</h2>
               <h1 className='text-5xl lg:text-6xl 2xl:text-8xl font-semibold'>{slide.title}</h1>
               <Link href={slide.url}>
                 <button className="hover:bg-gray-700 rounded-md bg-black text-white py-3 px-4">SHOP NOW</button>
               </Link>
             </div>
             {/*IMAGE CONTAINER*/}
-            <div className='h-1/2 xl:w-1/2 xl:h-full shadow-lg shadow-gray-500 relative'>
-              <Image src={slide.img} alt="" fill sizes="100%" className='object-cover'/>
+            <div className='h-1/2 xl:w-1/2 xl:h-full relative'>
+              <Image src={slide.img} alt="" fill sizes="100%" className='object-cover' style={{objectPosition: '50% 0%'}}/>
             </div>
           </div>
         ))}

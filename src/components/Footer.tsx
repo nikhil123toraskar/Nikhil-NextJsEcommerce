@@ -9,7 +9,7 @@ const FooterPage = () => {
         {/*LEFT*/}
         <div className=' w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8'>
         <Link href='/'>
-        <Image src="/fastlane555.png" alt="" className='max-w-36' width={300} height={200}/>
+        <Image src="/FastLane555.jpg" alt="" className='max-w-36' width={300} height={200}/>
         </Link>
         <p>
           3252 Winding Way, Central Plaza, Willowbrook, CA 90210, United States

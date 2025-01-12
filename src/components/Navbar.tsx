@@ -13,7 +13,7 @@ const NavabarPage = () => {
       <div className='h-full flex justify-between items-center md:hidden'>
         <Link href="/">
           {/* <div className="tracking-wide text-2xl">FastLane</div> */}
-          <Image src="/mastercard.png" alt="" className='max-w-36 mt-4' width={180} height={180}/>
+          <Image src="/FastLane444.jpg" alt="" className='max-w-36 mt-4' width={180} height={180}/>
         </Link>
         <Menu></Menu>
       </div>
@@ -22,7 +22,7 @@ const NavabarPage = () => {
         {/* LEFT */}
         <div className="w-1/3 xl:w-1/2 flex items-center gap-12">
           <Link href="/" >
-            <Image src="/mastercard.png" alt="" className='max-w-36 mt-4' width={200} height={200}/>
+            <Image src="/FastLane444.jpg" alt="" className='max-w-36 mt-4' width={200} height={200}/>
            
           </Link>
           <div className='hidden xl:flex gap-4'>

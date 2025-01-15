@@ -32,20 +32,29 @@ const slides = [
     img:"/slider3.jpg",
     url: "/",
     bg: "bg-gradient-to-r from-green-50 to-purple-50"
+  },
+  {
+    id: 4,
+    title: "Bold Looks for the Bright Days",
+    description: "Shop the Street Style Edit!",
+    //img: "https://images.pexels.com/photos/1183266/pexels-photo-1183266.jpeg?auto=compress&cs=tinysrgb&w=600",
+    img:"/slider4.jpg",
+    url: "/",
+    bg: "bg-gradient-to-r from-green-50 to-purple-50"
   }
 ]
 
 const Slider = () => {
   const [current, setCurrent] = useState(0);
 
-  //  useEffect(()=> {
-  //   const interval = setInterval(()=> {
-  //     setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
-  //   }, 3000);
+   useEffect(()=> {
+    const interval = setInterval(()=> {
+      setCurrent((prev) => (prev === slides.length - 1 ? 0 : prev + 1));
+    }, 3000);
 
-  //   return () => clearInterval(interval);
+    return () => clearInterval(interval);
     
-  //}) 
+  }) 
 
   return (
     <div className='h-[calc(100vh-80px)] overflow-hidden shadow-md'>

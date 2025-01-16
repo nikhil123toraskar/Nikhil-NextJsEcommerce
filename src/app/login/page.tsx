@@ -92,16 +92,20 @@ const LoginPage = () => {
           break;
       
       }
-
+      
       switch (response?.loginState) {
-        case LoginState.SUCCESS:
-          seteMessage("Successfull! Redirecting to main page");
-          const tokens = await myWixClient.auth.getMemberTokensForDirectLogin(response.data.sessionToken!);
-          Cookies.set("refreshToken", JSON.stringify(tokens.refreshToken), {expires:2});
+        case 'SUCCESS':
+          seteMessage("Successful! You are being redirected.");
+          const tokens = await myWixClient.auth.getMemberTokensForDirectLogin(
+            response.data.sessionToken!
+          );
+          Cookies.set("refreshToken", JSON.stringify(tokens.refreshToken), {
+            expires: 2,
+          });
           myWixClient.auth.setTokens(tokens);
           router.push("/");
-          break; 
-        case LoginState.FAILURE:
+          break;
+        case 'FAILURE':
           if(response.errorCode=='invalidEmail' || response.errorCode == 'invalidPassword') {
             setError("Invalid Email Or Password");
           }
@@ -112,10 +116,13 @@ const LoginPage = () => {
             setError("You need to reset password");
           }
           else setError("Something went wrong");
-        case LoginState.EMAIL_VERIFICATION_REQUIRED:
+          break;
+        case 'EMAIL_VERIFICATION_REQUIRED':
           setMode(MODE.EMAIL_VERIFICATION);
-        case LoginState.OWNER_APPROVAL_REQUIRED:
+          break;
+        case 'OWNER_APPROVAL_REQUIRED':
           seteMessage("Your account is pending approval");
+          break;
         default:
           break;
       }

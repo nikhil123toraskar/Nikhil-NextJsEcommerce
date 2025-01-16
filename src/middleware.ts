@@ -10,7 +10,7 @@ export const middleware = async (request: NextRequest) => {
   }
 
   const wixClient = createClient({
-    auth: OAuthStrategy({ clientId: process.env.NEXTJS_PUBLIC_WIX_CLIENTID! }),
+    auth: OAuthStrategy({ clientId: process.env.NEXT_PUBLIC_WIX_CLIENTID! }),
   });
 
   const tokens = await wixClient.auth.generateVisitorTokens();

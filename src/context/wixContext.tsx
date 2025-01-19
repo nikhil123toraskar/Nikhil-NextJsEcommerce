@@ -18,7 +18,7 @@ const wixClient = createClient({
     redirects
   },
   auth: OAuthStrategy({
-    clientId: process.env.NEXT_PUBLIC_WIX_CLIENTID!,
+    clientId: '5604bf31-0355-43b0-8c7a-6f8d1265f8db',
     tokens: {
       refreshToken,
       accessToken: { value: "", expiresAt: 0 },

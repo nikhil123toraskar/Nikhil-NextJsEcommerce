@@ -3,17 +3,38 @@
 import Image from "next/image"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Cart from "./CartModel";
 import { useWixClient } from "@/hooks/useWixClient";
 import Cookies from "js-cookie";
 import { useCartStore } from "@/hooks/useCartStore";
 
 const NavIcons = () => {
+  const cartRef = useRef<HTMLDivElement>(null);
+
+
 
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: { target: any; }) => {
+      if (cartRef.current && !cartRef.current.contains(event.target)) {
+        setIsCartOpen(false);
+      }
+    };
+
+    if (isCartOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isCartOpen]);
 
   const myWixClient = useWixClient();
   const isLoggedIn = myWixClient.auth.loggedIn();
@@ -95,7 +116,9 @@ const NavIcons = () => {
           {counter}
         </div>
       </div>
+      <div ref={cartRef}>
       {isCartOpen && <Cart></Cart>}
+    </div>
     </div>
   );
 }

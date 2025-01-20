@@ -35,7 +35,7 @@ const Cart = () => {
                     <div className=''>
                         {/*TITLE*/}
                             <div className='flex items-center justify-between gap-8'>
-                                <h3 className="font-semibold">{item.productName?.original}</h3>
+                                <h3 className="font-semibold max-w-64">{item.productName?.original}</h3>
                                 <div className='p-1 text-md bg-gray-50 rounded-sm flex items-center gap-2'>
                                   {item.quantity && item.quantity > 1 && <div className='text-xs text-green-500'>{item.quantity} x </div>} ₹ {item.price?.amount}</div>
                             </div>

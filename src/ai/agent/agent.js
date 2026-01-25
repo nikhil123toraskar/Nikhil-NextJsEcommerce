@@ -2,6 +2,9 @@ import fs from "fs";
 import path from "path";
 import { fetchProductsByIds } from "@/ai/data/fetchProductsByIds";
 
+const intentCache = new Map();
+const queryEmbeddingCache = new Map();
+let VECTOR_STORE = null;
 
 function cosineSimilarity(a, b) {
   let dot = 0;
@@ -17,14 +20,17 @@ function cosineSimilarity(a, b) {
   return dot / (Math.sqrt(normA) * Math.sqrt(normB));
 }
 
-
 export default class Agent {
   constructor(callLLM) {
     this.callLLM = callLLM;
   }
 
-async extractIntent(query) {
-  const systemPrompt = `
+  async extractIntent(query) {
+    if (intentCache.has(query)) {
+      return intentCache.get(query);
+    }
+
+    const systemPrompt = `
         You extract structured shopping intent from user queries.
 
         Return ONLY valid JSON.
@@ -46,19 +52,25 @@ async extractIntent(query) {
         → {"category":"perfume","minPrice":null,"maxPrice":null}
         `;
 
-  const response = await this.callLLM([
-    { role: "system", content: systemPrompt },
-    { role: "user", content: query }
-  ]);
+    const response = await this.callLLM([
+      { role: "system", content: systemPrompt },
+      { role: "user", content: query },
+    ]);
 
-  try {
-    return JSON.parse(response);
-  } catch {
-    return { category: null, minPrice: null, maxPrice: null };
+    try {
+      const intent = JSON.parse(response);
+      intentCache.set(query, intent);
+      return intent;
+    } catch {
+      return { category: null, minPrice: null, maxPrice: null };
+    }
   }
-}
 
   async embedQuery(query) {
+    if (queryEmbeddingCache.has(query)) {
+      return queryEmbeddingCache.get(query);
+    }
+
     const res = await fetch("http://localhost:11434/api/embeddings", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -69,14 +81,19 @@ async extractIntent(query) {
     });
 
     const data = await res.json();
-    return data.embedding;
+    const embedding = data.embedding;
+    queryEmbeddingCache.set(query, embedding);
+    return embedding;
   }
 
   loadVectorStore() {
     const filePath = path.join(process.cwd(), "src", "ai", "vectorStore.json");
+    if(!VECTOR_STORE) {
+        const raw = fs.readFileSync(filePath, "utf-8");
+        VECTOR_STORE = JSON.parse(raw);
+    }
 
-    const raw = fs.readFileSync(filePath, "utf-8");
-    return JSON.parse(raw);
+    return VECTOR_STORE;
   }
 
   async think(query) {
@@ -119,25 +136,24 @@ async extractIntent(query) {
       })
       .filter(Boolean);
 
-      let filteredResults = results;
+    let filteredResults = results;
 
-      if (intent.maxPrice != null) {
-        filteredResults = filteredResults.filter(
-          (p) => p.price != null && p.price <= intent.maxPrice,
-        );
-      }
+    if (intent.maxPrice != null) {
+      filteredResults = filteredResults.filter(
+        (p) => p.price != null && p.price <= intent.maxPrice,
+      );
+    }
 
-      if (intent.minPrice != null) {
-        filteredResults = filteredResults.filter(
-          (p) => p.price != null && p.price >= intent.minPrice,
-        );
-      }
+    if (intent.minPrice != null) {
+      filteredResults = filteredResults.filter(
+        (p) => p.price != null && p.price >= intent.minPrice,
+      );
+    }
 
-      return {
-        query,
-        intent,
-        results: filteredResults,
-      };
-
+    return {
+      query,
+      intent,
+      results: filteredResults,
+    };
   }
 }

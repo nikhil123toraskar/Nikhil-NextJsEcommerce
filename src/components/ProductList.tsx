@@ -85,7 +85,7 @@ const ProductList = async ({
     items = res.items;
     hasPrev = res.hasPrev();
     hasNext = res.hasNext();
-    showPagination = false;
+    showPagination = true;
 
     /* 🔍 Text filtering (UI-side, optional) */
     
@@ -154,7 +154,7 @@ const ProductList = async ({
         ))}
       </div>
 
-      {showPagination && !isAISearch && (
+      {showPagination  && (
         <Pagination
           currentPage={currentPage}
           hasPrev={hasPrev}

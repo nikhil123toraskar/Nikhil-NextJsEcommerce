@@ -23,38 +23,40 @@ export default class Agent {
     this.callLLM = callLLM;
   }
 
-  async extractIntent(query) {
-    const content = await this.callLLM([
-      {
-        role: "system",
-        content: `
-You extract shopping intent from a search query.
+async extractIntent(query) {
+  const systemPrompt = `
+        You extract structured shopping intent from user queries.
 
-Return ONLY valid JSON.
-No markdown. No explanation.
+        Return ONLY valid JSON.
+        Do not explain anything.
 
-Schema:
-{
-  "query": string,
-  "minPrice": number | null,
-  "maxPrice": number | null
-}
+        Fields:
+        - category (string | null)
+        - minPrice (number | null)
+        - maxPrice (number | null)
 
-Examples:
-"shoes under 3000" -> { "query": "shoes", "minPrice": null, "maxPrice": 3000 }
-"sneakers below 2000" -> { "query": "sneakers", "minPrice": null, "maxPrice": 2000 }
-"formal shoes" -> { "query": "formal shoes", "minPrice": null, "maxPrice": null }
-`
-      },
-      {
-        role: "user",
-        content: query
-      }
-    ]);
+        Examples:
+        "shoes under 3000"
+        → {"category":"shoes","minPrice":null,"maxPrice":3000}
 
-    return JSON.parse(content);
+        "sneakers between 2000 and 5000"
+        → {"category":"sneakers","minPrice":2000,"maxPrice":5000}
+
+        "perfume"
+        → {"category":"perfume","minPrice":null,"maxPrice":null}
+        `;
+
+  const response = await this.callLLM([
+    { role: "system", content: systemPrompt },
+    { role: "user", content: query }
+  ]);
+
+  try {
+    return JSON.parse(response);
+  } catch {
+    return { category: null, minPrice: null, maxPrice: null };
   }
-
+}
 
   async embedQuery(query) {
     const res = await fetch("http://localhost:11434/api/embeddings", {
@@ -80,9 +82,9 @@ Examples:
   async think(query) {
     const vectors = this.loadVectorStore();
 
-    //const intent = await this.extractIntent(query);
+    const intent = await this.extractIntent(query);
 
-    //console.log(intent, "extracted intent");
+    console.log(intent, "extracted intent");
 
     const queryEmbedding = await this.embedQuery(query);
 
@@ -94,7 +96,7 @@ Examples:
 
     scored.sort((a, b) => b.score - a.score);
 
-    const top = scored.slice(0, 5);
+    const top = scored.slice(0, 10);
 
     // Fetch real products
     const productIds = top.map((r) => r.id);
@@ -117,25 +119,25 @@ Examples:
       })
       .filter(Boolean);
 
-      // let filteredResults = results;
+      let filteredResults = results;
 
-      // if (intent.minPrice !== null) {
-      //   filteredResults = filteredResults.filter(
-      //     (p) => p.price >= intent.minPrice,
-      //   );
-      // }
+      if (intent.maxPrice != null) {
+        filteredResults = filteredResults.filter(
+          (p) => p.price != null && p.price <= intent.maxPrice,
+        );
+      }
 
-      // if (intent.maxPrice !== null) {
-      //   filteredResults = filteredResults.filter(
-      //     (p) => p.price <= intent.maxPrice,
-      //   );
-      // }
+      if (intent.minPrice != null) {
+        filteredResults = filteredResults.filter(
+          (p) => p.price != null && p.price >= intent.minPrice,
+        );
+      }
 
-
-    return {
-      query,
-      results: results,
-    };
+      return {
+        query,
+        intent,
+        results: filteredResults,
+      };
 
   }
 }

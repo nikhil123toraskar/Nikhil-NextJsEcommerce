@@ -1,5 +1,5 @@
 
-const OLLAMA_URL = 'http://localhost:11434/api/chat';
+const OLLAMA_URL = `${process.env.OLLAMA_BASE_URL}/api/chat`;
 const MODEL = 'llama3.1'; // or llama3 if that’s what you pulled
 
 export async function callLLM(messages) {

@@ -71,7 +71,7 @@ export default class Agent {
       return queryEmbeddingCache.get(query);
     }
 
-    const res = await fetch("http://localhost:11434/api/embeddings", {
+    const res = await fetch(`${process.env.OLLAMA_BASE_URL}/api/embeddings`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({

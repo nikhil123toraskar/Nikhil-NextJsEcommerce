@@ -24,7 +24,7 @@ const ShopPage = async ({ searchParams }: ShopPageProps) => {
   if (isAIMode && searchParams?.name) {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/ai/recommend",
+        "api/ai/recommend",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

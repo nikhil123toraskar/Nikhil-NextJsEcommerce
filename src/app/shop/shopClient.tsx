@@ -1,25 +1,18 @@
 "use client";
 
 import { Suspense } from "react";
-import ProductList from "@/components/ProductList";
+import AiLoader from "@/components/AiLoader";
 
 export default function ShopClient({
-  searchParams,
-  aiProductIds,
+  children,
 }: {
-  searchParams: any;
-  aiProductIds?: string[];
+  children: React.ReactNode;
 }) {
   return (
-    <Suspense
-      key={searchParams?.name} // 🔥 THIS is the fix
-      fallback={<div className="py-20 text-center">🤖 AI is thinking…</div>}
-    >
-      <ProductList
-        searchParams={searchParams}
-        aiProductIds={aiProductIds}
-        showPagination={false}
-      />
-    </Suspense>
+    <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+      <Suspense fallback={<AiLoader />}>
+        {children}
+      </Suspense>
+    </div>
   );
 }

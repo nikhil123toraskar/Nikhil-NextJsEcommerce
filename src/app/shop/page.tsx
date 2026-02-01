@@ -19,7 +19,7 @@ const ShopPage = async ({ searchParams }: ShopPageProps) => {
   if (searchParams?.name) {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/ai/recommend`,
+        'https://nikhil-next-js-ecommerce-jvvu8ik1i-nikhils-projects-87c0ff01.vercel.app/api/ai/recommend',
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

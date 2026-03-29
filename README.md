@@ -1,36 +1,69 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# E-commerce with AI-Powered Search
+
+This is a [Next.js](https://nextjs.org/) project with AI-powered product search using local Ollama models.
 
 ## Getting Started
 
-First, run the development server:
-
+### 1. Install Dependencies
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. Set up Local AI (Required for AI Search)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Prerequisites:**
+- Install [Ollama](https://ollama.ai/) on your system
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+**Quick Setup:**
+```bash
+# Run the automated setup script
+./setup-local-ai.sh
+```
 
-## Learn More
+**Manual Setup:**
+```bash
+# Start Ollama service
+ollama serve
 
-To learn more about Next.js, take a look at the following resources:
+# Pull required models (in another terminal)
+ollama pull nomic-embed-text      # For embeddings
+ollama pull llama3.1              # For text generation
+ollama pull llama3:8b-instruct-q4_0  # For AI agent
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. Generate Product Embeddings (One-time setup)
+```bash
+# Generate embeddings for your products
+node src/ai/embeddings/generateEmbeddings.ts
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+### 4. Start Development Server
+```bash
+npm run dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3001](http://localhost:3001) with your browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 5. Test AI Search
+Visit: `http://localhost:3001/shop?name=shoes&mode=ai`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## AI Features
+
+- **Local AI Search**: Uses Ollama models running locally (no API keys or cloud services required)
+- **Semantic Search**: Finds products based on meaning, not just keywords
+- **Vector Embeddings**: Pre-computed embeddings stored locally
+
+## Environment Variables
+
+Create a `.env` file with:
+```
+NEXT_PUBLIC_WIX_CLIENTID=your-wix-client-id
+OLLAMA_BASE_URL=http://localhost:11434
+```
+
+## Project Structure
+
+- `src/ai/embeddings/` - Vector search and embedding generation
+- `src/ai/agent/` - AI agent for complex queries
+- `src/app/api/ai/recommend/` - AI search API endpoint
+- `src/app/shop/` - Shop page with AI search integration

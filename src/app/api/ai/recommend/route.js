@@ -17,8 +17,7 @@
 // }
 
 import { NextResponse } from "next/server";
-
-const AI_SERVER = "http://103.195.6.92:3001/recommend";
+import { searchProducts } from "@/ai/embeddings/searchProducts";
 
 export async function POST(req) {
   try {
@@ -31,27 +30,24 @@ export async function POST(req) {
       );
     }
 
-    const res = await fetch(AI_SERVER, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: body.query,
-      }),
-    });
-
-    const data = await res.json();
+    // Use local search functionality instead of deployed server
+    const results = await searchProducts(body.query, 10);
 
     return NextResponse.json({
-      result: data,
+      result: {
+        results: results.map(item => ({
+          id: item.id,
+          name: item.name,
+          score: item.score
+        }))
+      }
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("Local AI search failed:", err);
 
     return NextResponse.json(
-      { error: "AI server failed" },
+      { error: "AI search failed" },
       { status: 500 }
     );
   }

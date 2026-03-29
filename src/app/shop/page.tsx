@@ -26,7 +26,7 @@ const ShopPage = async ({ searchParams }: ShopPageProps) => {
       const headersList = headers();
       const host = headersList.get("host");
 
-      const protocol = "https";
+      const protocol = "http";
 
       const baseUrl = `${protocol}://${host}`;
 

@@ -39,6 +39,17 @@ async function main() {
       Description: ${product.description || ""}
       Price: ${product.priceData?.price || ""}
       Type: ${product.productType || ""}
+      ${product.productOptions ? product.productOptions.map(option => {
+        if (option.name === 'Size') {
+          const sizes = option.choices?.map(choice => choice.value || choice.description).join(', ') || '';
+          return `Available Sizes: ${sizes}`;
+        }
+        if (option.name === 'Color') {
+          const colors = option.choices?.map(choice => choice.description || choice.value).join(', ') || '';
+          return `Available Colors: ${colors}`;
+        }
+        return '';
+      }).filter(Boolean).join('\n') : ''}
     `.trim();
 
     const embedding = await generateEmbedding(text);

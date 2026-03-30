@@ -37,24 +37,23 @@ const ProductList = async ({
   /* =========================
      AI SEARCH (AI decides relevance)
   ========================== */
+
   if (isAISearch) {
     const res = await wixClient.products
       .queryProducts()
       .hasSome("_id", aiProductIds)
       .find();
 
+    // For debug: inspect what fields Wix product returns for embedding/extraction planning
+    //console.log("Wix product result (AI path):", JSON.stringify(res.items[0] || {}, null, 2));
+
     // Preserve AI ranking order
     items = aiProductIds
       .map(id => res.items.find(p => p._id === id))
       .filter(Boolean) as products.Product[];
 
-    items = items.slice(0, PRODUCT_PER_PAGE);
-  }
-
-  /* =========================
-     NON-AI FLOW (Wix decides relevance)
-  ========================== */
-  else {
+    items = items.slice(0, 8);
+  } else {
     let productQuery = wixClient.products
       .queryProducts()
       .hasSome("productType", [
@@ -82,10 +81,14 @@ const ProductList = async ({
     }
 
     const res = await productQuery.find();
+
+    // For debug: inspect what fields Wix returns on normal search flow
+    console.log("Wix product result (non-AI path):", JSON.stringify(res.items[0] || {}, null, 2));
+
     items = res.items;
     hasPrev = res.hasPrev();
     hasNext = res.hasNext();
-    showPagination = true;
+    showPagination = showPagination && (hasPrev || hasNext);
 
     /* 🔍 Text filtering (UI-side, optional) */
     

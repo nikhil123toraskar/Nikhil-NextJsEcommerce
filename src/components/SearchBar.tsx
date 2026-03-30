@@ -1,12 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
+import AiLoader from "./AiLoader";
 
 const SearchBar = () => {
   const router = useRouter();
-  const [aiMode, setAiMode] = useState(false);
+  const searchParams = useSearchParams();
+  const [isSearching, setIsSearching] = useState(false);
+  const currentSearchParams = searchParams?.toString() ?? "";
+
+  useEffect(() => {
+    setIsSearching(false);
+  }, [currentSearchParams]);
 
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,30 +23,21 @@ const SearchBar = () => {
 
     if (!query) return;
 
-    const baseUrl = `/shop?name=${encodeURIComponent(query)}`;
-    const finalUrl = aiMode ? `${baseUrl}&mode=ai` : baseUrl;
+    const params = new URLSearchParams();
+    params.set("name", query);
 
-    router.push(finalUrl);
+    const newSearchParams = params.toString();
+    if (newSearchParams === currentSearchParams) {
+      setIsSearching(false);
+      return;
+    }
+
+    setIsSearching(true);
+    router.push(`/shop?${newSearchParams}`);
   };
 
   return (
     <div className="flex items-center gap-3 flex-1">
-      {/* AI Toggle */}
-      <button
-        type="button"
-        onClick={() => setAiMode((prev) => !prev)}
-        className={`px-3 py-2 rounded-md text-sm font-medium border transition
-          ${
-            aiMode
-              ? "bg-black text-white border-black"
-              : "bg-white text-gray-600 border-gray-300"
-          }`}
-        title="Toggle AI search"
-      >
-        AI
-      </button>
-
-      {/* Search form */}
       <form
         onSubmit={handleSearch}
         className="flex items-center gap-4 bg-gray-100 p-2 rounded-md flex-1"
@@ -47,15 +45,17 @@ const SearchBar = () => {
         <input
           name="name"
           type="text"
-          placeholder={aiMode ? "Search with AI…" : "Search products"}
+          placeholder="Search with AI…"
           className="flex-1 bg-transparent outline-none"
         />
         <button type="submit">
           <Image src="/search.png" alt="" width={16} height={16} />
         </button>
       </form>
+      {isSearching ? <AiLoader fullScreen /> : null}
     </div>
   );
 };
 
 export default SearchBar;
+
